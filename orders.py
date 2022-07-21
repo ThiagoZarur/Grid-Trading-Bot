@@ -1,10 +1,5 @@
 #Se encargara de enviar las ordenes al exchange con su formato adecuado 
-
-from gettext import find
-from venv import create
 import ccxt
-from numpy import FLOATING_POINT_SUPPORT
-from pkg_resources import resource_listdir 
 from pymongo import MongoClient, mongo_client
 from concurrent.futures import ThreadPoolExecutor
 import time 
