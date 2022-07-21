@@ -1,6 +1,3 @@
-from hashlib import new
-from symtable import Symbol
-from turtle import position, update
 from unicorn_binance_websocket_api import BinanceWebSocketApiManager
 from pymongo import MongoClient, mongo_client
 import pandas as pd
