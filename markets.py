@@ -56,7 +56,7 @@ def update_markets(exchange):
             for symbol in temp:
                 query = {'symbol': symbol}
                 cursor.d_one(query)
-        
+        client.close()
         
 exchange = ccxt.binance({
     'api_key': config('API_KEY',default=''),

@@ -1,6 +1,5 @@
 #Enviar los datos que llegan desde el websocket a su colección correspondiente
 
-from turtle import update
 import pandas as pd
 from pymongo import MongoClient, mongo_client
 
@@ -30,7 +29,7 @@ def update_balances():
         for id in idx:
             query = {'_id':id}
             cursor.delete_one(query)
-            
+    db_client.close()       
 
 def update_orders():
     db_client = MongoClient('localhost')
@@ -77,6 +76,7 @@ def update_orders():
                 query={'i':id}
                 cursor_active_orders.delete_many(query)
             del idx, canceled
+    db_client.close()
             
 def update_database():
     db_client = MongoClient('localhost')
@@ -103,4 +103,3 @@ def update_database():
                     cursor.delete_one(query)
                 update_orders()
                 update_balances()
-    

@@ -51,6 +51,7 @@ def check_balances(order ={}):
         
         if balance['free'] > order['amount']:
             flag=True
+    db_client.close()
     return flag
 
 def create_order(exchange,params_order={}):
@@ -76,3 +77,4 @@ def cancel_order(exhange, params_order={}):
     symbol_info = cursor.find_one(query)
     
     exhange.cancel_order(symbol = symbol_info['symbol'], id = int(params_order['i']))
+    db_client.close()

@@ -34,6 +34,7 @@ def update_mid_price(symbol,new_ask = None, new_bid = None):
     
     update ={'$set':{'midprice':midprice}}
     cursor.update_one(query, update)
+    db_client.close()
     
 #Recibir los datos del exchange
 def print_stream(ws):
@@ -79,7 +80,7 @@ def run_websockets(symbols, channels):
         ws.print_summary()
         time.sleep(5)
     
-symbols = ['btcusdt']
-channels = ['depth5']
-run_websockets(symbols=symbols,channels=channels)
+# symbols = ['btcusdt']
+# channels = ['depth5']
+# run_websockets(symbols=symbols,channels=channels)
     
