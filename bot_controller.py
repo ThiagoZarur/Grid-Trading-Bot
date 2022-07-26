@@ -1,12 +1,11 @@
 #Se encargara de manejar los procesos y mantener persistencia con el exchange 
 
-import multiprocessing
 import sys
 sys.path.append('../')
 import pandas as pd
 import ccxt 
 from pymongo import MongoClient, mongo_client 
-from multiprocessing import Process
+from multiprocessing import Process, freeze_support
 import time
 from decouple import config
 
@@ -29,36 +28,38 @@ class BotController:
             'defaultType': 'spot'
             }
         })
-
-        def bot_runner(self):
-            websymbols = [(symbol.repace('/','').lower()) for symbol in self.symbols]
-            p1 = Process(target= run_websockets, args=(websymbols, ['depth5']))
-            p1.start()
+        
+    def bot_runner(self):
+        websymbols = [(symbol.replace('/','').lower()) for symbol in self.symbols]
+        p1 = Process(target= run_websockets, args=(websymbols, ['depth5']))
+        p1.start()
             
-            p2 = Process(target=update_database)
-            p2.start()
+        p2 = Process(target=update_database)
+        p2.start()
             
-            time.sleep(3)
+        time.sleep(3)
             
-            while True:
-                try:
-                    for symbol in self.symbols:
-                        new_orders, cancel_order = self.strategy.get_orders(symbol = symbol)
-                        update_orders(exchange= self.exchange, new_orders=new_orders, cancel_orders=cancel_order)
+        while True:
+            try:
+                for symbol in self.symbols:
+                    new_orders, cancel_order = self.strategy.get_orders(symbol = symbol)
+                    update_orders(exchange= self.exchange, new_orders=new_orders, cancel_orders=cancel_order)
                         
-                except Exception as e:
-                    print(e)
+            except Exception as e:
+                print(e)
 
-symbols = ['ETH/BTC']
+if __name__ == '__main__':
+    freeze_support()
+    symbols = ['ETH/BTC']
 
 
-params = {
+    params = {
     'n_grids': 5,
     'p_grids':0.5,
     's_grids': 1.5
     
-}
+    }
 
-stragey = GridBot(params=params)
-model = BotController(symbols=symbols, strategy=stragey)
-model.bot_runner()
+    stragey = GridBot(params=params)
+    model = BotController(symbols=symbols, strategy=stragey)
+    model.bot_runner()
